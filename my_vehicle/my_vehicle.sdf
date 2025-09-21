@@ -1,0 +1,32 @@
+<?xml version="1.0" ?>
+<sdf version='1.6'>
+  <model name='my_vehicle'>
+  
+    <author>
+      <name>MacManhHai</name>
+      <email>hai372002@gmail.com</email>
+    </author>
+
+    <include>
+      <uri>model://iris</uri>
+    </include>
+    
+    <include>
+      <uri>model://sf10a</uri>
+      <pose>0 0 0.001 0 0 0</pose>
+    </include>
+    <joint name="sf10a_joint" type="fixed">
+      <child>sf10a::link</child>
+      <parent>iris::base_link</parent>
+      <axis>
+        <xyz>0 0 1</xyz>
+        <limit>
+          <upper>0</upper>
+          <lower>0</lower>
+        </limit>
+      </axis>
+    </joint>
+
+  </model>
+</sdf>
+
