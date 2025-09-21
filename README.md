@@ -91,6 +91,7 @@ colcon build
 source install/setup.bash
 ros2 run uav_control uav_control
 ```
+![Demo Animation](images/uav.gif)
 
 ### Step 5: Upload firmware to Pixhawk
 ```
