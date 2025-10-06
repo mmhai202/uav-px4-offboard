@@ -16,7 +16,7 @@ This project provides a C++ based UAV simulation and control framework built on 
 
 - Download [PX4 firmware](https://docs.px4.io/main/en/dev_setup/building_px4.html) (v1.15.1)
 ```
-git clone --branch v1.15.1 --recursive https://github.com/PX4/PX4-Autopilot.git
+git clone --branch v1.15.1 --recursive --depth 1 https://github.com/PX4/PX4-Autopilot.git
 ```
 
 - Install [Gazebo-Classic 11](https://docs.px4.io/main/en/sim_gazebo_classic/) (simulation env)
@@ -29,7 +29,7 @@ sudo apt install libopencv-dev protobuf-compiler libeigen3-dev libgstreamer1.0-d
 
 - Install [XRCE-DDS](https://docs.px4.io/main/en/ros2/user_guide.html#setup-micro-xrce-dds-agent-client) (v2.4.2) (bridge between PX4 and ROS 2)
 ```
-git clone -b master https://github.com/eProsima/Micro-XRCE-DDS-Agent.git
+git clone --branch v2.4.2 --depth 1 https://github.com/eProsima/Micro-XRCE-DDS-Agent.git
 cd Micro-XRCE-DDS-Agent
 mkdir build
 cd build
