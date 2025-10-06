@@ -27,9 +27,9 @@ sudo aptitude install gazebo libgazebo11 libgazebo-dev
 sudo apt install libopencv-dev protobuf-compiler libeigen3-dev libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev
 ```
 
-- Install [XRCE-DDS](https://docs.px4.io/main/en/ros2/user_guide.html#setup-micro-xrce-dds-agent-client) (v2.4.2) (bridge between PX4 and ROS 2)
+- Install [XRCE-DDS](https://docs.px4.io/main/en/ros2/user_guide.html#setup-micro-xrce-dds-agent-client) (v2.4.3) (bridge between PX4 and ROS 2)
 ```
-git clone --branch v2.4.2 --depth 1 https://github.com/eProsima/Micro-XRCE-DDS-Agent.git
+git clone --branch v2.4.3 --depth 1 https://github.com/eProsima/Micro-XRCE-DDS-Agent.git
 cd Micro-XRCE-DDS-Agent
 mkdir build
 cd build
