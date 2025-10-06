@@ -9,14 +9,41 @@ This project provides a C++ based UAV simulation and control framework built on 
 ### Step 1: Basic setup
 
 - Install [ROS 2 Humble](https://docs.ros.org/en/humble/Installation/Ubuntu-Install-Debs.html) on Ubuntu 22.04
+```
+sudo apt update && sudo apt install locales
+sudo locale-gen en_US en_US.UTF-8
+sudo update-locale LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8
+export LANG=en_US.UTF-8
+sudo apt install software-properties-common
+sudo add-apt-repository universe
+sudo apt update && sudo apt install curl -y
+sudo curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu $(. /etc/os-release && echo $UBUNTU_CODENAME) main" | sudo tee /etc/apt/sources.list.d/ros2.list > /dev/null
+sudo apt update && sudo apt upgrade -y
+sudo apt install ros-humble-desktop
+sudo apt install ros-dev-tools
+source /opt/ros/humble/setup.bash && echo "source /opt/ros/humble/setup.bash" >> .bashrc
+```
+
+- Some Python dependencies must also be installed
+```
+pip install --user -U empy==3.3.4 pyros-genmsg setuptools
+```
 
 - Install colcon to build ROS 2 packages (v0.18.4)
+```
+pip install --user colcon-core==0.18.4 colcon-common-extensions==0.3.0
+```
 
 ### Step 2: Download firmware
 
 - Download [PX4 firmware](https://docs.px4.io/main/en/dev_setup/building_px4.html) (v1.15.1)
 ```
+mkdir DevPX4 && cd DevPX4
 git clone -b v1.15.1 --recursive --depth 1 https://github.com/PX4/PX4-Autopilot.git
+bash ./PX4-Autopilot/Tools/setup/ubuntu.sh
+cd PX4-Autopilot/
+make px4_sitl_default gazebo-classic_iris
 ```
 
 - Install [Gazebo-Classic 11](https://docs.px4.io/main/en/sim_gazebo_classic/) (simulation env)
@@ -31,8 +58,7 @@ sudo apt install libopencv-dev protobuf-compiler libeigen3-dev libgstreamer1.0-d
 ```
 git clone -b v2.4.3 --depth 1 https://github.com/eProsima/Micro-XRCE-DDS-Agent.git
 cd Micro-XRCE-DDS-Agent
-mkdir build
-cd build
+mkdir build && cd build
 cmake ..
 make
 sudo make install
@@ -75,7 +101,7 @@ Open some terminals
 
 - Terminal 1: run PX4 firmware
 ```
-cd PX4-Autopilot
+cd DevPX4/PX4-Autopilot
 make px4_sitl_default gazebo-classic_my_vehicle__my_world
 ```
 
@@ -86,7 +112,7 @@ MicroXRCEAgent udp4 -p 8888
 
 - Terminal 3: run uav_px4 project
 ```
-cd uav_px4
+cd DevPX4/uav_px4
 colcon build
 source install/setup.bash
 ros2 run uav_control uav_control
