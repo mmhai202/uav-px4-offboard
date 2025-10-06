@@ -25,14 +25,14 @@ sudo apt install ros-dev-tools
 source /opt/ros/humble/setup.bash && echo "source /opt/ros/humble/setup.bash" >> .bashrc
 ```
 
-- Some Python dependencies must also be installed
-```
-pip install --user -U empy==3.3.4 pyros-genmsg setuptools
-```
-
 - Install colcon to build ROS 2 packages (v0.18.4)
 ```
 pip install --user colcon-core==0.18.4 colcon-common-extensions==0.3.0
+```
+
+- Some Python dependencies must also be installed
+```
+pip install --user -U empy==3.3.4 pyros-genmsg setuptools
 ```
 
 ### Step 2: Download firmware
