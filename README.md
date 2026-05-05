@@ -37,17 +37,16 @@ pip install --user -U empy==3.3.4 pyros-genmsg setuptools
 
 ### Step 2: Download firmware
 
-- Download [PX4 firmware](https://docs.px4.io/main/en/dev_setup/building_px4.html) (v1.15.1)
+- Download [PX4 firmware](https://docs.px4.io/main/en/dev_setup/building_px4.html) (v1.15.1) and this repository
 ```
 mkdir DevPX4 && cd DevPX4
 git clone -b v1.15.1 --recursive --depth 1 https://github.com/PX4/PX4-Autopilot.git
-bash ./PX4-Autopilot/Tools/setup/ubuntu.sh
-cd PX4-Autopilot/
-make px4_sitl_default gazebo-classic_iris
+git clone https://github.com/mmhai202/uav-px4-offboard.git
 ```
 
 - Install [Gazebo-Classic 11](https://docs.px4.io/main/en/sim_gazebo_classic/) (simulation env)
 ```
+bash ./PX4-Autopilot/Tools/setup/ubuntu.sh
 sudo apt remove gz-harmonic
 sudo apt install aptitude
 sudo aptitude install gazebo libgazebo11 libgazebo-dev
@@ -65,35 +64,41 @@ sudo make install
 sudo ldconfig /usr/local/lib/
 ```
 
-- Clone [uav_px4](https://github.com/mmhai202/uav_px4) project
+- Build PX4 once to verify the environment
+```
+cd ~/DevPX4/PX4-Autopilot
+make px4_sitl_default gazebo-classic_iris
+```
 
 ### Step 3: Project Config
-**Build map**
-
-- Create map: Add file `my_world.world` to the following path:  
-*home/DevPX4/PX4-Autopilot/Tools/simulation/gazebo-classic/sitl_gazebo-classic/worlds*
-
-- Run map: 
+- Assume `PX4-Autopilot` and this project are siblings under the same root, for example:
 ```
-gazebo ~/DevPX4/PX4-Autopilot/Tools/simulation/gazebo-classic/sitl_gazebo-classic/worlds/my_world.world
+DevPX4/
+|-- PX4-Autopilot
+`-- uav-px4-offboard
 ```
 
-- Add map: Open file `sitl_targets_gazebo-classic.cmake` in the following path, then add `my_world` to `set(worlds)`   
-*home/DevPX4/PX4-Autopilot/src/modules/simulation/simulator_mavlink*
+- Run the setup script from this repository:
+```
+cd ~/DevPX4/uav-px4-offboard
+./scripts/config_px4.sh
+```
 
-**Build model**
+- The script assumes the standard PX4 directory tree already exists and copies the prepared files from `config/` into it, including:
+  - `my_world/my_world.world`
+  - `my_vehicle/`
+  - `10050_gazebo-classic_my_vehicle`
+  - `CMakeLists.txt`
+  - `sitl_targets_gazebo-classic.cmake`
+  - `sitl_run.sh`
 
-- Creat model param: Place file `10050_gazebo-classic_my_vehicle` in the following path, then add it to `px4_add_romfs_files()` inside `CMakeLists.txt`  
-*home/DevPX4/PX4-Autopilot/ROMFS/px4fmu_common/init.d-posix/airframes*
+- These files overwrite the matching files in PX4.
+- This copy-based config is intended for `PX4-Autopilot v1.15.1`.
 
-- Create model: Add folder `my_vehicle` in the following path  
-*home/DevPX4/PX4-Autopilot/Tools/simulation/gazebo-classic/sitl_gazebo-classic/models*
-
-- Add model: Open file `sitl_targets_gazebo-classic.cmake` in the following path, then add `my_vehicle` to `set(modles)`  
-*home/DevPX4/PX4-Autopilot/src/modules/simulation/simulator_mavlink*
-
-- Set model to the origin in simulation: Open file `sitl_run.sh` in the following path, then search for "spawn-file" and chane (x,y,z) to `-x 0.0 -y 0.0 -z 0.83`  
-*home/DevPX4/PX4-Autopilot/Tools/simulation/gazebo-classic*
+- If your PX4 directory is not `../PX4-Autopilot`, pass it explicitly:
+```
+./scripts/config_px4.sh /path/to/PX4-Autopilot
+```
 
 ### Step 4: Build and Run project
 
@@ -110,9 +115,9 @@ make px4_sitl_default gazebo-classic_my_vehicle__my_world
 MicroXRCEAgent udp4 -p 8888
 ```
 
-- Terminal 3: run uav_px4 project
+- Terminal 3: run the `uav-px4-offboard` project
 ```
-cd DevPX4/uav_px4
+cd ~/DevPX4/uav-px4-offboard
 colcon build
 source install/setup.bash
 ros2 run uav_control uav_control

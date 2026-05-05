@@ -1,10 +1,12 @@
 #include "control.h"
 #include "planning.h"
+#include <ament_index_cpp/get_package_share_directory.hpp>
 
 Control::Control(const std::vector<Point3D>& path) : Node("mission")
 {
+    const std::string log_file_path = std::string(UAV_PX4_OFFBOARD_REPO_ROOT) + "/uav_log.csv";
 
-    log_file_.open("/home/hai/DevPX4/uav_simulation/src/uav_log.csv", std::ios::out | std::ios::trunc);
+    log_file_.open(log_file_path, std::ios::out | std::ios::trunc);
     log_file_ << "x_desired,y_desired,z_desired,x_actual,y_actual,z_actual\n";
 
     // Initialize publishers
@@ -226,10 +228,13 @@ void Control::publish_control_setpoint(float roll, float pitch, float yaw, float
 int main(int argc, char *argv[])
 {
     std::cout << "Starting mission node..." << std::endl;
+
+    const std::string package_share_dir = ament_index_cpp::get_package_share_directory("uav_control");
+    const std::string world_file = package_share_dir + "/worlds/my_world.world";
     
     // Load obstacles from the world file
     std::vector<Obstacle> obstacles = Planning::loadObstaclesFromWorld(
-        "/home/hai/DevPX4/uav_px4/my_world/my_world.world", 0.5);
+        world_file, 0.5);
 
     // Create path planning object
     Planning planner(obstacles);
