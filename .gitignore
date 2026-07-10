@@ -1,0 +1,20 @@
+# ROS 2 / colcon build artifacts
+/build/
+/install/
+/log/
+
+# Runtime logs and generated data
+*.log
+*.csv
+
+# Python cache
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Editor and OS files
+.vscode/
+.idea/
+*.swp
+*~
+.DS_Store
